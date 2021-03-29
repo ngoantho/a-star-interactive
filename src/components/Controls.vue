@@ -20,12 +20,9 @@
         <input type="checkbox" id="showCellCost" v-model="showCellCost" />
         <label for="showCellCost">Show cell cost</label>
       </div>
-      <div>
-        <input type="number" id="weight" min="1" max="100" v-model="weight" />
-        <label for="weight"> Weight</label>
-      </div>
     </fieldset>
     <fieldset :disabled="processing">
+      <legend>Start</legend>
       <button @click="start">Start</button>
       <button @click="$emit('clearPath')">
         Clear path
@@ -52,7 +49,7 @@ let Props = Vue.extend({
 });
 
 @Component({
-  computed: mapState(["weight", "showCellCost"]),
+  computed: mapState(["showCellCost"]),
 })
 export default class Controls extends Props {
   hueStr = "manhattan";
@@ -73,14 +70,6 @@ export default class Controls extends Props {
 
   get showCellCost() {
     return this.$store.state.showCellCost;
-  }
-
-  set weight(value) {
-    this.$store.commit("setWeight", parseInt(value));
-  }
-
-  get weight() {
-    return this.$store.state.weight;
   }
 
   start() {

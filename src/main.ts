@@ -8,13 +8,9 @@ Vue.use(Vuex);
 
 let store = new Vuex.Store({
   state: {
-    weight: 1,
     showCellCost: false,
   },
   mutations: {
-    setWeight(state, newWeight) {
-      state.weight = newWeight;
-    },
     setShowCellCost(state, newOp) {
       state.showCellCost = newOp;
     },

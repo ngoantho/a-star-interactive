@@ -20,7 +20,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { mapState } from "vuex";
 
 @Component({
-  computed: mapState(["weight", "showCellCost"]),
+  computed: mapState(["showCellCost"]),
   props: ["id", "value", "startPos", "endPos", "rowId", "cellId"],
 })
 export default class Cell extends Vue {
@@ -92,7 +92,7 @@ export default class Cell extends Vue {
     background-color: gray;
   }
   &.is-in-path {
-    background-color: yellow;
+    background-color: gold;
   }
   &.is-start {
     background-color: chartreuse;

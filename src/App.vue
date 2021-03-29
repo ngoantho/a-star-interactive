@@ -58,7 +58,14 @@ export default class App extends Vue {
     let endNode = new GridNode(this.endPosition.x, this.endPosition.y, 1);
 
     let result = search(graph, startNode, endNode, closest, heuristic);
+    if (result === []) {
+      alert("No path found.");
+      return;
+    }
+
     if (showAnimation) {
+      console.log(result);
+
       this.processing = true;
       result.forEach((el, i) => {
         setTimeout(() => {
@@ -98,4 +105,18 @@ export default class App extends Vue {
 }
 </script>
 
-<style></style>
+<style>
+html,
+body {
+  height: 100%;
+  font-size: 16px;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  margin: 0 4rem 0 4rem;
+  align-items: center;
+  justify-content: space-evenly;
+}
+</style>

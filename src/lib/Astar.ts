@@ -90,7 +90,13 @@ function search(
   return [];
 }
 
-let heuristics = {
+interface HeuristicList {
+  [key: string]: Heuristic;
+}
+
+type Heuristic = (pos0: GridNode, pos1: GridNode) => number;
+
+let heuristics: HeuristicList = {
   manhattan(pos0: GridNode, pos1: GridNode) {
     let d1 = Math.abs(pos1.x - pos0.x);
     let d2 = Math.abs(pos1.y - pos0.y);
@@ -115,3 +121,4 @@ function cleanNode(node: GridNode) {
 }
 
 export { search, heuristics, cleanNode };
+export { Heuristic };

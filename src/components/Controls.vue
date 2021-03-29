@@ -1,6 +1,6 @@
 <template>
   <aside>
-    <fieldset>
+    <fieldset :disabled="processing">
       <legend>Settings</legend>
       Heuristic
       <div v-for="hue in heuristics" :key="hue">
@@ -13,6 +13,10 @@
         <label for="closest">Find closest path</label>
       </div>
       <div>
+        <input type="checkbox" id="showAnimation" v-model="showAnimation" />
+        <label for="showAnimation">Show animation</label>
+      </div>
+      <div>
         <input type="checkbox" id="showCellCost" v-model="showCellCost" />
         <label for="showCellCost">Show cell cost</label>
       </div>
@@ -21,9 +25,12 @@
         <label for="weight"> Weight</label>
       </div>
     </fieldset>
-    <fieldset>
-      <button :disabled="processing" @click="start">Start</button>
-      <button :disabled="processing" @click="$emit('clearWalls')">
+    <fieldset :disabled="processing">
+      <button @click="start">Start</button>
+      <button @click="$emit('clearPath')">
+        Clear path
+      </button>
+      <button @click="$emit('clearWalls')">
         Clear walls
       </button>
     </fieldset>
@@ -50,6 +57,7 @@ let Props = Vue.extend({
 export default class Controls extends Props {
   hueStr = "manhattan";
   closest = true;
+  showAnimation = true;
 
   get heuristic() {
     return methods[this.hueStr];
@@ -79,6 +87,7 @@ export default class Controls extends Props {
     this.$emit("start", {
       heuristic: this.heuristic,
       closest: this.closest,
+      showAnimation: this.showAnimation,
     });
   }
 }

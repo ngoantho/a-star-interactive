@@ -10,12 +10,15 @@
         :rowId="rowId"
         :cellId="cellId"
         :value="cell"
+        :mouse-down="mouseDown"
+        @clickCell="(payload) => $emit('clickCell', payload)"
       ></Cell>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import GridNode from "@/lib/GridNode";
 import { Component, Vue } from "vue-property-decorator";
 import Cell from "./Cell.vue";
 
@@ -30,6 +33,9 @@ let Props = Vue.extend({
     endPosition: {
       type: Object,
     },
+    path: {
+      type: Array,
+    },
   },
 });
 
@@ -40,6 +46,8 @@ let Props = Vue.extend({
 })
 export default class MapViewer extends Props {
   map!: number[][];
+  path!: GridNode[];
+  mouseDown = false;
   startPosition!: {
     x: number;
     y: number;

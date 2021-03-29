@@ -4,11 +4,13 @@
       :processing="processing"
       @clearWalls="clearWalls"
       @start="start"
+      @clearPath="clearPath"
     ></controls>
     <map-viewer
       :map="map"
       :startPosition="startPosition"
       :endPosition="endPosition"
+      :path="path"
     ></map-viewer>
   </div>
 </template>
@@ -17,15 +19,15 @@
 import { Component, Vue } from "vue-property-decorator";
 import Controls from "./components/Controls.vue";
 import MapViewer from "./components/MapViewer.vue";
-import { Heuristic } from "./lib/Astar";
+import { Heuristic, search } from "./lib/Astar";
 import testMap from "./maps/example.json";
 import Graph from "./lib/Graph";
 import GridNode from "./lib/GridNode";
-import { search } from "./lib/Astar";
 
 interface Options {
   heuristic: Heuristic;
   closest: boolean;
+  showAnimation: boolean;
 }
 
 // @ts-ignore
@@ -36,8 +38,9 @@ interface Options {
   },
 })
 export default class App extends Vue {
-  processing = false;
   map!: number[][];
+  path: GridNode[] = [];
+  processing = false;
   startPosition!: {
     x: number;
     y: number;
@@ -47,16 +50,41 @@ export default class App extends Vue {
     y: number;
   };
 
-  start({ heuristic, closest }: Options) {
+  start({ heuristic, closest, showAnimation }: Options) {
+    this.clearPath();
+
     let graph = new Graph(this.map);
     let startNode = new GridNode(this.startPosition.x, this.startPosition.y, 1);
     let endNode = new GridNode(this.endPosition.x, this.endPosition.y, 1);
 
     let result = search(graph, startNode, endNode, closest, heuristic);
-    console.log(result);
+    if (showAnimation) {
+      this.processing = true;
+      result.forEach((el, i) => {
+        setTimeout(() => {
+          this.path.push(el);
+          if (i === result.length - 1) {
+            this.processing = false;
+          }
+        }, i * 100);
+      });
+    } else {
+      this.path = result;
+    }
   }
 
-  clearWalls() {}
+  clearPath() {
+    this.path = [];
+  }
+
+  clearWalls() {
+    this.clearPath();
+    this.map = this.map.map((x) => {
+      return x.map(() => {
+        return 1;
+      });
+    });
+  }
 
   loadMap() {
     this.map = testMap.map;

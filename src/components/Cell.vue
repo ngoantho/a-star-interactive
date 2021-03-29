@@ -3,21 +3,28 @@
     <span
       :class="[
         'bg',
-        { 'is-wall': isWall, 'is-start': isStart, 'is-end': isEnd },
+        {
+          'is-wall': isWall,
+          'is-start': isStart,
+          'is-end': isEnd,
+          'is-in-path': isInPath,
+        },
       ]"
     ></span>
   </div>
 </template>
 
 <script lang="ts">
+import GridNode from "@/lib/GridNode";
 import { Component, Vue } from "vue-property-decorator";
 import { mapState } from "vuex";
 
 @Component({
   computed: mapState(["weight", "showCellCost"]),
-  props: ["value", "startPos", "endPos", "rowId", "cellId"],
+  props: ["id", "value", "startPos", "endPos", "rowId", "cellId"],
 })
 export default class Cell extends Vue {
+  id!: string;
   value!: number;
   startPos!: {
     x: number;
@@ -37,6 +44,8 @@ export default class Cell extends Vue {
       return "Start";
     } else if (this.isEnd) {
       return "Goal";
+    } else if (this.isInPath) {
+      return "In Path";
     }
     return "";
   }
@@ -51,6 +60,13 @@ export default class Cell extends Vue {
 
   get isEnd() {
     return this.rowId === this.endPos.x && this.cellId === this.endPos.y;
+  }
+
+  get isInPath() {
+    /* @ts-ignore */
+    return this.$parent.path.find(
+      (cell: GridNode) => this.id === `${cell.x}_${cell.y}`
+    );
   }
 }
 </script>
@@ -75,8 +91,11 @@ export default class Cell extends Vue {
   &.is-wall {
     background-color: gray;
   }
+  &.is-in-path {
+    background-color: yellow;
+  }
   &.is-start {
-    background-color: green;
+    background-color: chartreuse;
   }
   &.is-end {
     background-color: red;

@@ -23,6 +23,7 @@ import { Heuristic, search } from "./lib/Astar";
 import testMap from "./maps/example.json";
 import Graph from "./lib/Graph";
 import GridNode from "./lib/GridNode";
+import {mapState} from "vuex";
 
 interface Options {
   heuristic: Heuristic;
@@ -36,18 +37,17 @@ interface Options {
     MapViewer,
     Controls,
   },
+  computed: mapState(["map", "endPosition"])
 })
 export default class App extends Vue {
-  map!: number[][];
   path: GridNode[] = [];
   processing = false;
-  startPosition!: {
+  startPosition: {
     x: number;
     y: number;
-  };
-  endPosition!: {
-    x: number;
-    y: number;
+  } = {
+    x: 0,
+    y: 0
   };
 
   start({ heuristic, closest, showAnimation }: Options) {
@@ -93,6 +93,22 @@ export default class App extends Vue {
     });
   }
 
+  set map(value) {
+    this.$store.commit("setMap", value);
+  }
+
+  set endPosition(value) {
+    this.$store.commit("setEndPosition", value);
+  }
+
+  get map() {
+    return this.$store.state.map;
+  }
+
+  get endPosition() {
+    return this.$store.state.endPosition;
+  }
+
   loadMap() {
     this.map = testMap.map;
     this.startPosition = testMap.start;
@@ -116,7 +132,7 @@ body {
   height: 100%;
   display: flex;
   margin: 0 4rem 0 4rem;
-  align-items: center;
-  justify-content: space-evenly;
+  /* align-items: center; */
+  /* justify-content: space-evenly; */
 }
 </style>

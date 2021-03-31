@@ -9,10 +9,21 @@ Vue.use(Vuex);
 let store = new Vuex.Store({
   state: {
     showCellCost: false,
+    map: [],
+    endPosition: {
+      x: 0,
+      y: 0,
+    },
   },
   mutations: {
     setShowCellCost(state, newOp) {
       state.showCellCost = newOp;
+    },
+    setMap(state, map) {
+      state.map = map;
+    },
+    setEndPosition(state, endPosition) {
+      state.endPosition = endPosition;
     },
   },
 });

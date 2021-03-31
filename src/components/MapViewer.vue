@@ -61,9 +61,9 @@ export default class MapViewer extends Props {
 
 <style lang="postcss" scoped>
 .map {
-  overflow: auto;
+  /* overflow: auto; */
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   flex-direction: column;
 
   & .row {
